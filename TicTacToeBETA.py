@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-2 player not done, but sort of works
+V-1
 
-1 player works 
-
-I have only tested in IDE
-
-output formatting not complete
+5/23/21
 
 """
 import random
 
 print('Welcome! make a selection 1-9')
 theBoard= {'1': '1', '2': '2', '3': '3','4': '4', '5': '5', '6': '6','7': '7', '8': '8', '9': '9'}
-print(theBoard)
+#print(theBoard)
 
 
 #prints the board
@@ -77,6 +73,7 @@ def playerCount():
     global computerPlayer
     player_count = input('1 or 2 players:\n')
     if player_count == str(1):
+        print('\n'*20)
         player1 = input('X or O?\n').upper()
         players['turn'] = 'player_1'
         computerPlayer= True
@@ -87,13 +84,15 @@ def playerCount():
             else:
                 players['player_2'] = 'X'
                 players['player_1']= "O"
-            print('Single player. \nPlayer 1 is: ' + players['player_1'] + " and the computer is: " + players['player_2'] )
+            print('\n' *20)
+            print('Single player. \n\nPlayer 1 is: ' + players['player_1'] + " and the computer is: " + players['player_2'] )
         else:
             print('You did not enter a X or O')
             playerCount()
             
             
     elif player_count == str(2):
+        print('\n'*20)
         print('Two players')
         chooser= random.randint(1, 2) # random player to choose x or o
         if chooser == 1:
@@ -106,6 +105,7 @@ def playerCount():
                 else:
                     players['player_2'] = 'X'
                     players['player_1']= "O"
+                print('\n'*20)
                 print('Two player. \nPlayer 1 is: ' + players['player_1'] + " and Player 2 is: " + players['player_2']) 
             else:
                 print('You did not enter a X or O')
@@ -120,7 +120,8 @@ def playerCount():
                 else:
                     players['player_1'] = 'X'
                     players['player_2']= "O"
-                print('Two Player. \nPlayer 1 is: ' + players['player_1'] + " and Player 2 is: " + players['player_2']) 
+                print('\n'*20)
+                print('Two Player. \n\nPlayer 1 is: ' + players['player_1'] + " and Player 2 is: " + players['player_2']) 
             else:
                 print('You did not enter a X or O')
                 playerCount()
@@ -196,20 +197,21 @@ while gameOn == True:
     #current_player = randomFirstTurn()
     if computerPlayer == True:
         print("Player 1 will go first and the computer will be player 2")
+        print('\n'*2)
         while gameOver == False:
             #while winCheck(theBoard) == False or fullboard(theBoard) == False:
             
             #whosturn = player1
             
             print(players['turn'] + "\'s turn | "+ players[players['turn']])
-            print('\n')
+            print('\n'*2)
             
             printBoard(theBoard)
             
             # player 1 turn
             if players['turn'] == 'player_1':
                 player1choice = input('Pick a location: \n') # asks for location
-                playerInputCheck(player1choice) # checks the input
+                player1choice=playerInputCheck(player1choice) # checks the input
                 
                 while theBoard[str(player1choice)] == "X" or theBoard[str(player1choice)] == "O" : # will keep asking if the picked location is already a X or a O
                     
@@ -261,17 +263,25 @@ while gameOn == True:
             
             players['turn'] = swapPlayer(players['turn']) # changes the turn value 
             
-        # 2 player not done
+        # 2 player
     else:
         while winCheck(theBoard) == False:
             #whosturn = player1
             
-            print(players['turn'] + "\'s Turn")
+            print(players['turn'] + "\'s Turn" + ' | ' + players[players['turn']])
+            print('\n'*2)
             
             printBoard(theBoard)
             
+            player_choice = input('Pick a location: \n')
+            player_choice = playerInputCheck(player_choice)
             
-            theBoard[playerChoice(theBoard)] = players[players['turn']]
+            while theBoard[str(player_choice)] == "X" or theBoard[str(player_choice)] == "O" :
+                player_choice = input('Location already taken, Pick another location: \n')
+                
+            else:    
+            
+                theBoard[player_choice] = players[players['turn']]
             
             
             printBoard(theBoard)
@@ -279,10 +289,22 @@ while gameOn == True:
                     
             players['turn'] = swapPlayer(players['turn'])
             
-            print('\n' * 50)
+            print('\n' * 20)
             
-            if winCheck(theBoard) == True:
-               gameOn = False
+               
+            if winCheck(theBoard) == True or fullboard(theBoard) == True: # win and full board checks
+                if winCheck(theBoard) == True:
+                    
+                    print("Game Over " + players['turn'] + ' wins! \n')
+                    printBoard(theBoard)
+                    gameOn = False
+                    break
+               
+                elif fullboard(theBoard) == True:
+                    print('Tie Game\n')
+                    printBoard(theBoard)
+                    gameOn= False
+                    break
         
 
 
